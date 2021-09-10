@@ -1,0 +1,47 @@
+<%- layout('layouts/boilerplate') %>
+    <main id="main">
+
+        <!-- ======= Blog Grid ======= -->
+        <div id="journal-blog" class="text-left  paddsections">
+
+            <div class="container">
+                <div class="section-title text-center">
+                    <h2>journal</h2>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="journal-block">
+                    <div class="row">
+                        <% for(let blog of blogs){%>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="journal-info mb-30">
+
+
+                                    <a href="/blog/:id"><img src="<%=blog.thumbnail[0].url%>" class="img-responsive"
+                                            style="width:640px; height:480px" alt="img"></a>
+
+                                    <div class="journal-txt">
+                                        <h4><a href="blog-single.html">
+                                                <%=blog.title%>
+                                            </a>
+                                        </h4>
+                                        <p class="separator">
+                                            <%=blog.description%>
+                                        </p>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <%} %>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div><!-- End Blog Grid -->
+
+    </main><!-- End #main -->

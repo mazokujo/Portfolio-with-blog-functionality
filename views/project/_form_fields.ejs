@@ -1,0 +1,43 @@
+<div class="form-group">
+  <label for="title">Title</label>
+  <input required value="<%= project.title %>" type="text" name="title" id="title" class="form-control">
+</div>
+<div class="form-group">
+  <label for="client">client</label>
+  <input required value="<%=project.client%>" type="text" name="client" id="client" class="form-control">
+</div>
+
+<div class="form-group">
+  <label for="category">category</label>
+  <input required value="<%=project.category%>" type="text" name="category" id="category" class="form-control">
+</div>
+
+
+<div class="form-group">
+  <label for="date">date</label>
+  <input required value="<%=project.date%>" type="date" name="date" id="date" class="form-control">
+</div>
+
+<div class="form-group">
+  <label for="customFile">Thumbnail</label>
+  <input type="file" class="form-control" id="customFile" name="thumbnail" multiple>
+</div>
+
+<div class="form-group">
+  <label for="description">Description</label>
+  <textarea name="description" id="description" class="form-control"><%=project.description%></textarea>
+</div>
+
+<div class="form-group">
+  <label for="url">url</label>
+  <input required value="<%=project.url%>" type="text" name="url" id="url" class="form-control">
+</div>
+
+<div class="form-group">
+  <label for="content">content</label>
+  <textarea required name="content" id="content" class="form-control"><%=project.content%></textarea>
+</div>
+
+
+<a href="/" class="btn btn-secondary">Cancel</a>
+<button type="submit" class="btn btn-primary">Save</button>
