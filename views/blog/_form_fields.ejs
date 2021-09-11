@@ -8,22 +8,27 @@
   <textarea required name="content" id="content" class="form-control"><%=blog.content%></textarea>
 </div>
 
+<div class="my-3">
+  <img src="<%=blog.thumbnail.micro%>" alt="" class="img-thumbnail">
+  <div class="form-check-inline">
+    <input type="checkbox" id="image-1" name="deleteImages[]" value="<%=blog.thumbnail.filename%>">
+  </div>
+  <label for="image-1">Click to remove current thumbnail from cloudinary</label>
+</div>
 <div class="form-group mt-3">
-  <label for="customFile">Thumbnail</label>
+  <label for="customFile">Upload new thumbnail</label>
   <input type="file" class="form-control" id="customFile" name="thumbnail">
 </div>
-
-
 <div class="form-group">
-  <label for="title">date</label>
-  <input required value="<%= blog.title %>" type="date" name="date" id="title" class="form-control">
+  <%if(!blog.date){ %>
+    <label for="title">date</label>
+    <input required value=<%=blog.date%> type="date"
+    name="date" id="title" class="form-control"><% %>
 </div>
-
-
-<div class="form-group">
-  <label for="description">Description</label>
-  <textarea name="description" id="description" class="form-control"><%=blog.description%></textarea>
-</div>
-
-<a href="/" class="btn btn-secondary">Cancel</a>
-<button type="submit" class="btn btn-primary">Save</button>
+<% } %>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea name="description" id="description" class="form-control"><%=blog.description%></textarea>
+  </div>
+  <a href="/" class="btn btn-secondary">Cancel</a>
+  <button type="submit" class="btn btn-primary">Save</button>

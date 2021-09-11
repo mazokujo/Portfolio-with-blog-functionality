@@ -9,6 +9,9 @@ const ImageSchema = new Schema({
 ImageSchema.virtual('mini').get(function () {
     return this.url.replace('/upload', '/upload/w_800,h_600')
 })
+ImageSchema.virtual('micro').get(function () {
+    return this.url.replace('/upload', '/upload/w_200')
+})
 
 const ProjectSchema = new Schema({
     title: String,
@@ -16,6 +19,7 @@ const ProjectSchema = new Schema({
     category: String,
     content: String,
     client: String,
+    description: String,
     date: {
         type: Date,
         default: Date.now

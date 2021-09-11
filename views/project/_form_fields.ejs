@@ -18,9 +18,19 @@
   <input required value="<%=project.date%>" type="date" name="date" id="date" class="form-control">
 </div>
 
+
 <div class="form-group">
   <label for="customFile">Thumbnail</label>
   <input type="file" class="form-control" id="customFile" name="thumbnail" multiple>
+</div>
+<div class="my-3">
+  <% project.thumbnail.forEach((img,i)=>{%>
+    <img src="<%=img.micro%>" alt="" class="img-thumbnail">
+    <div class="form-check-inline">
+      <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+    </div>
+    <label for="image-<%=i%>">Delete?</label>
+    <% }) %>
 </div>
 
 <div class="form-group">

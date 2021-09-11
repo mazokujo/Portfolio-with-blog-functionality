@@ -15,8 +15,9 @@
                                 <div class="container-main single-main">
                                     <div class="col-md-12">
                                         <div class="block-main mb-30">
-                                            <img src=<%=blog.thumbnail.mini%> class="img-responsive" alt="reviews2">
+                                            <img src="<%=blog.thumbnail.mini%>" class="img-responsive" alt="reviews2">
                                             <div class="content-main single-post padDiv">
+
                                                 <div class="journal-txt">
                                                     <h2><a href="#">
                                                             <%=blog.title%>
@@ -37,6 +38,9 @@
 
 
                                             </div>
+
+                                            <a href="/blog/<%=blog._id%>/edit " class="btn">Edit blog</a>
+                                            <a href="" class="btn">Delete</a>
                                         </div>
                                     </div>
                                     <div class="col-md-12">

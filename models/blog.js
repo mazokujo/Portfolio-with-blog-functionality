@@ -9,6 +9,9 @@ const ImageSchema = new Schema({
 ImageSchema.virtual('mini').get(function () {
     return this.url.replace('/upload', '/upload/w_800,h_600')
 })
+ImageSchema.virtual('micro').get(function () {
+    return this.url.replace('/upload', '/upload/w_200')
+})
 // // opts helps to enable virtuals in JSON
 // const opts = { toJSON: { virtuals: true } }
 
@@ -22,8 +25,8 @@ const BlogSchema = new Schema({
         ref: 'Review'
     }],
     date: {
-        type: Date,
-        default: Date.now
+        type: Date
+        // default: Date.now
     }
 
 

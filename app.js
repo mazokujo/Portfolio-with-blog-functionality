@@ -14,6 +14,9 @@ const upload = multer({ storage })
 
 //ejs-mate (to improve html template)
 const ejsMate = require('ejs-mate');
+//require method override for put, push, delete route
+const methodOverride = require('method-override');
+//mongoose and mongoose models
 const mongoose = require('mongoose');
 const Blog = require('./models/blog')
 const Review = require('./models/review')
@@ -50,14 +53,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 // public directory: middleware to enable static files in our boilerplate
 app.use(express.static(path.join(__dirname, 'public')));
+//use method override
+app.use(methodOverride('_method'));
 
 
-//route to home
-app.get('/', async (req, res) => {
-    const blogs = await Blog.find({})
-    const projects = await Project.find({})
-    res.render('home', { blogs, projects })
-});
 //blog index
 app.get('/blog', async (req, res) => {
     const blogs = await Blog.find({})
@@ -99,6 +98,61 @@ app.post('/blog', upload.single('thumbnail'), async (req, res) => {
     // // // req.flash('success', 'farm has been added');
     res.redirect(`/blog/${newBlog._id}`)
 });
+// edit a project
+app.get('/project/:id/edit', async (req, res) => {
+    const { id } = req.params
+    const project = await Project.findById(id);
+    // if (!item) {
+    //     req.flash('error', 'Cannot find that campground')
+    //     return res.redirect('/campground')
+    // }
+    res.render('project/edit', { project });
+})
+
+app.put('/project/:id', upload.array('thumbnail'), async (req, res) => {
+    const { id } = req.params;
+    console.log(req.body);
+    const project = await Project.findByIdAndUpdate(id, req.body, { runValidators: true, new: true });
+    const newImgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    project.thumbnail.push(...newImgs);
+    await project.save();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await project.updateOne({ $pull: { thumbnail: { filename: { $in: req.body.deleteImages } } } }, { new: true })
+    }
+
+    res.redirect(`/project/${project._id}`)
+
+})
+
+//edit a blog
+app.get('/blog/:id/edit', async (req, res) => {
+    const { id } = req.params
+    const blog = await Blog.findById(id);
+    // if (!item) {
+    //     req.flash('error', 'Cannot find that campground')
+    //     return res.redirect('/campground')
+    // }
+    res.render('blog/edit', { blog });
+})
+
+app.put('/blog/:id', async (req, res) => {
+    const { id } = req.params;
+    console.log(req.body);
+    const blog = await Blog.findByIdAndUpdate(id, req.body, { runValidators: true, new: true });
+    const newImg = { url: req.file.path, filename: req.file.filename }
+    blog.thumbnail = newImg;
+    await blog.save();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+    }
+    res.redirect(`/blog/${blog._id}`)
+})
+
 
 //route to single project
 app.get('/project/:id', async (req, res) => {
@@ -113,7 +167,15 @@ app.get('/blog/:id', async (req, res) => {
     console.log(blog)
     res.render('blog/show', { blog })
 });
-//connection to port 3000
+
+//route to home
+app.get('/', async (req, res) => {
+    const blogs = await Blog.find({})
+    const projects = await Project.find({})
+    res.render('home', { blogs, projects })
+});
+
+//connection to port 8000
 app.listen(3000, () => {
-    console.log("APP IS LISTENING ON PORT 3000!")
+    console.log("APP IS LISTENING ON PORT 8000!")
 })
