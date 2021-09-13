@@ -62,8 +62,14 @@
                                 <%-project.content%>
 
                             </div>
-                            <a href="/project/<%=project._id%>/edit" class="btn">Edit project</a>
-                            <a href="" class="btn">Delete</a>
+
+                            <div class="mb-3 d-flex flex-row ">
+                                <a href="/project/<%=project._id%>/edit " class="btn mx-3">Edit project</a>
+                                <form action="/project/<%=project._id%>?_method=DELETE" method="POST">
+                                    <button class="btn">Delete Project</button>
+                                </form>
+                            </div>
+
                         </div>
 
                     </div>

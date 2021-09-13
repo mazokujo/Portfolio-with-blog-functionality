@@ -14,8 +14,11 @@
 
 
 <div class="form-group">
-  <label for="date">date</label>
-  <input required value="<%=project.date%>" type="date" name="date" id="date" class="form-control">
+  <%if(!project.date){ %>
+    <label for="date">date</label>
+    <input required value="<%=project.date%>" type="date" name="date" id="date" class="form-control">
+    <% } %>
+
 </div>
 
 

@@ -154,12 +154,32 @@ app.put('/blog/:id', async (req, res) => {
 })
 
 
+// delete blog
+app.delete('/blog/:id', async (req, res) => {
+    const { id } = req.params;
+    const deletedBlog = await Blog.findByIdAndDelete(id);
+    res.redirect('/blog');
+})
+
+//delete project
+app.delete('/project/:id', async (req, res) => {
+    const { id } = req.params;
+    const deletedProject = await Project.findById(id);
+    for (let filename of deletedProject.thumbnail[0].filename) {
+        await cloudinary.uploader.destroy(filename)
+    }
+    await Project.findByIdAndDelete(id)
+    res.redirect('/project');
+})
+
+
 //route to single project
 app.get('/project/:id', async (req, res) => {
     const project = await Project.findById(req.params.id)
     console.log(project)
     res.render('project/show', { project })
 })
+
 
 //route to a single blog 
 app.get('/blog/:id', async (req, res) => {

@@ -36,11 +36,14 @@
 
                                                 <%-blog.content%>
 
-
+                                            </div>
+                                            <div class="mb-3 d-flex flex-row ">
+                                                <a href="/blog/<%=blog._id%>/edit " class="btn mx-3">Edit blog</a>
+                                                <form action="/blog/<%=blog._id%>?_method=DELETE" method="POST">
+                                                    <button class="btn">Delete Blog</button>
+                                                </form>
                                             </div>
 
-                                            <a href="/blog/<%=blog._id%>/edit " class="btn">Edit blog</a>
-                                            <a href="" class="btn">Delete</a>
                                         </div>
                                     </div>
                                     <div class="col-md-12">

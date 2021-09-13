@@ -25,8 +25,8 @@ const BlogSchema = new Schema({
         ref: 'Review'
     }],
     date: {
-        type: Date
-        // default: Date.now
+        type: Date,
+
     }
 
 
