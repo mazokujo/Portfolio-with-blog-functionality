@@ -8,11 +8,8 @@ const ImageSchema = new Schema({
 ImageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('/upload', '/upload/w_200')
 })
-const ReviewSchema = new Schema({
-    text: {
-        type: String,
-        required: [true, "Can't submit without comment"]
-    },
+const CommentSchema = new Schema({
+    text: String,
     profile: [ImageSchema],
     owner: {
         type: Schema.Types.ObjectId,
@@ -21,6 +18,6 @@ const ReviewSchema = new Schema({
 });
 //exporting Review model
 
-const Review = mongoose.model('Review', ReviewSchema);
+const Comment = mongoose.model('Comment', CommentSchema);
 
-module.exports = Review;
+module.exports = Comment;

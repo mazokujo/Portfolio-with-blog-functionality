@@ -22,10 +22,14 @@ const ProjectSchema = new Schema({
     description: String,
     date: {
         type: Date,
-        default: Date.now
+
     },
 
-    url: String
+    url: String,
+    owner: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 
 })
 

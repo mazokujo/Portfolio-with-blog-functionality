@@ -20,12 +20,12 @@ const BlogSchema = new Schema({
     thumbnail: ImageSchema,
     content: String,
     description: String,
-    review: [{
+    comment: [{
         type: Schema.Types.ObjectId,
-        ref: 'Review'
+        ref: 'Comment'
     }],
     date: {
-        type: Date,
+        type: Date
 
     }
 

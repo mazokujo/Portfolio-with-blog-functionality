@@ -3,11 +3,13 @@
 
         <body>
             <main id="main">
-                <%-body%>
-                    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-                            class="bi bi-arrow-up-short"></i></a>
-                    <%- include('../partials/boilerplate/footer') %>
+                <%- include('../partials/boilerplate/flash') %>
+                    <%-body%>
+                        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+                                class="bi bi-arrow-up-short"></i></a>
+                        <%- include('../partials/boilerplate/footer') %>
             </main>
+            <script src="/jsfiles/formValidation.js"></script>
         </body>
 
         </html>
