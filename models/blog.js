@@ -25,9 +25,15 @@ const BlogSchema = new Schema({
         ref: 'Comment'
     }],
     date: {
-        type: Date
+        type: Date,
+        default: Date.now
 
-    }
+
+    },
+    owner: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 
 
 })

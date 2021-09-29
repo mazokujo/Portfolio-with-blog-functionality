@@ -24,6 +24,9 @@ const flash = require('connect-flash');
 const ejsMate = require('ejs-mate');
 //require method override for put, push, delete route
 const methodOverride = require('method-override');
+//require nodemailer
+const nodemailer = require('nodemailer')
+
 //mongoose and mongoose models
 const mongoose = require('mongoose');
 const MongoDBStore = require('connect-mongo');
@@ -46,6 +49,9 @@ mongoose.connect(dbLocal, {
     // //remove mongoose deprecation error 
     // useFindAndModify: false,
 
+
+
+
 });
 // handling error in mongoose connection
 const db = mongoose.connection;
@@ -56,6 +62,9 @@ db.once('open', function () {
     console.log(dbLocal)
 });
 
+//use method override
+app.use(methodOverride('_method'));
+
 //ejs engine
 app.engine('ejs', ejsMate);
 app.set('views', path.join(__dirname, 'views'));
@@ -64,6 +73,8 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 //url encoded
 app.use(express.urlencoded({ extended: true }));
+//JSON conversion to string middleware
+app.use(express.json());
 
 //create new mongostore which change default storage of session from browser to mongo
 // setting up the secret for our session
@@ -106,16 +117,18 @@ passport.deserializeUser(User.deserializeUser());
 
 //we can also add req.user object, it will be accessed in every single request
 app.use((req, res, next) => {
-    console.log(req.query)
-    console.log(req.session);
     if (!['/login', '/'].includes(req.originalUrl)) {
+        console.log(req.originalUrl)
         req.session.returnTo = req.originalUrl
     }
+    console.log(req.query)
+    console.log(req.session);
+    res.locals.currentUser = req.user
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
-    res.locals.currentUser = req.user
     next()
 })
+
 
 
 
@@ -136,11 +149,12 @@ app.get('/project/new', isLoggedin, wrapAsync(async (req, res) => {
     res.render('project/new', { project: new Project() })
 }));
 
-app.post('/project', upload.array('thumbnail'), isLoggedin, isProjectOwner, wrapAsync(async (req, res) => {
+app.post('/project', upload.array('thumbnail'), isLoggedin, wrapAsync(async (req, res) => {
     const newProject = await new Project(req.body)
     console.log(req.files)
     newProject.thumbnail = req.files.map(f => ({ url: f.path, filename: f.filename }))
     newProject.owner = req.user._id;
+    console.log(newProject.owner)
     await newProject.save();
     // we use a flash message before redirecting
     req.flash('success', 'project has been added');
@@ -152,7 +166,7 @@ app.post('/project', upload.array('thumbnail'), isLoggedin, isProjectOwner, wrap
 app.get('/blog/new', isLoggedin, wrapAsync(async (req, res) => {
     res.render('blog/new', { blog: new Blog() })
 }));
-app.post('/blog', upload.single('thumbnail'), isLoggedin, isBlogOwner, wrapAsync(async (req, res) => {
+app.post('/blog', upload.single('thumbnail'), isLoggedin, wrapAsync(async (req, res) => {
     const newBlog = await new Blog(req.body)
     console.log(req.file)
     newBlog.thumbnail = { url: req.file.path, filename: req.file.filename }
@@ -204,7 +218,7 @@ app.get('/blog/:id/edit', isLoggedin, isBlogOwner, wrapAsync(async (req, res) =>
     res.render('blog/edit', { blog });
 }))
 
-app.put('/blog/:id', isLoggedin, isBlogOwner, wrapAsync(async (req, res) => {
+app.put('/blog/:id', upload.single('thumbnail'), isLoggedin, isBlogOwner, wrapAsync(async (req, res) => {
     const { id } = req.params;
     console.log(req.body);
     const blog = await Blog.findByIdAndUpdate(id, req.body, { runValidators: true, new: true });
@@ -336,7 +350,35 @@ app.get('/logout', (req, res) => {
 })
 
 
+//send an email from the landing page
+app.post('/', (req, res) => {
+    console.log(req.body)
+    //transport info to our email in object transporter
 
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_ACCOUNT,
+            pass: process.env.EMAIL_PASSWORD
+        }
+    })
+    const mailOptions = {
+        from: req.body.email,
+        to: process.env.EMAIL_ACCOUNT,
+        subject: `Message from ${req.body.email} : ${req.body.subject}`,
+        text: req.body.message
+    }
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log(error);
+            res.send('error');
+        } else {
+            console.log('Email sent:' + info.response)
+            res.send('success')
+        }
+    })
+
+})
 
 
 //route to home
@@ -345,10 +387,10 @@ app.get('/', async (req, res) => {
     const projects = await Project.find({})
     res.render('home', { blogs, projects })
 });
-// handling all remaining error
-app.all('*', (req, res, next) => {
-    next(new AppError('Page Not Found', 404))
-})
+// // handling all remaining error
+// app.all('*', (req, res, next) => {
+//     next(new AppError('Page Not Found', 404))
+// })
 // error handling middleware with custom message notification
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;

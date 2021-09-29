@@ -24,12 +24,27 @@ const extension = (joi) => ({
 
 const Joi = BaseJoi.extend(extension)
 
-module.exports.campgroundSchema = Joi.object({
-    campground: Joi.object({
+module.exports.blogSchema = Joi.object({
+    blog: Joi.object({
         title: Joi.string().required().escapeHTML(),
-        location: Joi.string().required().escapeHTML(),
-        price: Joi.number().required().min(0),
+        content: Joi.string().required().escapeHTML(),
         description: Joi.string().required().escapeHTML(),
+        date: Joi.date().required()
+        // images: Joi.object({
+        //     url: Joi.string().required(),
+        //     filename: Joi.string().required(),
+        // }).required()
+    }).required(),
+    deleteImages: Joi.object()
+})
+module.exports.projectSchema = Joi.object({
+    project: Joi.object({
+        title: Joi.string().required().escapeHTML(),
+        content: Joi.string().required().escapeHTML(),
+        category: Joi.string().required().escapeHTML(),
+        description: Joi.string().required().escapeHTML(),
+        client: Joi.string().required().escapeHTML(),
+        date: Joi.date().required()
         // images: Joi.object({
         //     url: Joi.string().required(),
         //     filename: Joi.string().required(),
@@ -37,11 +52,13 @@ module.exports.campgroundSchema = Joi.object({
     }).required(),
     deleteImages: Joi.array()
 })
-module.exports.reviewSchema = Joi.object({
+
+module.exports.commentSchema = Joi.object({
     review: Joi.object({
         text: Joi.string().required().escapeHTML(),
-        rating: Joi.number().required().min(1).max(5)
     }).required()
 })
+
+
 
 
