@@ -42,9 +42,9 @@ module.exports.validateProject = (req, res, next) => {
 module.exports.isBlogOwner = async (req, res, next) => {
     const { id } = req.params;
     const blog = await Blog.findById(id).populate('owner');
-    console.log(`blog.owner:${blog.owner}`)
+    console.log(`blog.owner:${blog.owner._id}`)
     console.log(`req.user:${req.user._id}`)
-    if (!blog.owner === req.user._id) {
+    if (!blog.owner.equals(req.user)) {
         req.flash('error', 'You do not have permission')
         res.redirect(`/blog/${id}`);
     }
@@ -56,9 +56,9 @@ module.exports.isProjectOwner = async (req, res, next) => {
     const project = await Project.findById(id).populate('owner');
     console.log(`project.owner:${project.owner}`)
     console.log(`req.user:${req.user._id}`)
-    if (!project.owner === req.user._id) {
+    if (!project.owner.equals(req.user)) {
         req.flash('error', 'You do not have permission')
-        res.redirect(`/blog/${id}`);
+        res.redirect(`/project/${id}`);
     }
     next()
 
@@ -70,7 +70,7 @@ module.exports.isCommentOwner = async (req, res, next) => {
     const comment = await Comment.findById(commentId).populate('owner');
     console.log(`comment.owner:${comment.owner}`)
     console.log(`req.user:${req.user}`)
-    if (!comment.owner === req.user._id) {
+    if (!comment.owner.equals(req.user._id)) {
         req.flash('error', 'You do not have permission')
         res.redirect(`/blog/${id}`);
     }

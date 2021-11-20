@@ -29,11 +29,11 @@ module.exports.blogSchema = Joi.object({
         title: Joi.string().required().escapeHTML(),
         content: Joi.string().required().escapeHTML(),
         description: Joi.string().required().escapeHTML(),
-        date: Joi.date().required()
-        // images: Joi.object({
-        //     url: Joi.string().required(),
-        //     filename: Joi.string().required(),
-        // }).required()
+        date: Joi.date().required(),
+        thumbnail: Joi.object({
+            url: Joi.string().required(),
+            filename: Joi.string().required(),
+        }).required()
     }).required(),
     deleteImages: Joi.object()
 })
@@ -54,7 +54,7 @@ module.exports.projectSchema = Joi.object({
 })
 
 module.exports.commentSchema = Joi.object({
-    review: Joi.object({
+    comment: Joi.object({
         text: Joi.string().required().escapeHTML(),
     }).required()
 })

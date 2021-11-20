@@ -26,10 +26,10 @@ const ProjectSchema = new Schema({
     },
 
     url: String,
-    owner: [{
+    owner: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }]
+    }
 
 })
 

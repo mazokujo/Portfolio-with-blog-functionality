@@ -52,7 +52,11 @@ const seedDB = async () => {
 
     }
 }
-seedDB()
+
+const deleteOne = async () => {
+    await Blog.deleteMany({});
+}
+deleteOne()
     .then(res => {
         console.log(res)
     })

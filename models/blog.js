@@ -20,20 +20,22 @@ const BlogSchema = new Schema({
     thumbnail: ImageSchema,
     content: String,
     description: String,
-    comment: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Comment'
-    }],
+    comment: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Comment'
+        }
+    ],
     date: {
         type: Date,
         default: Date.now
 
 
     },
-    owner: [{
+    owner: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }]
+    }
 
 
 })

@@ -51,7 +51,7 @@
                                     </li>
                                     <li><strong>Project date</strong>: <%=project.date%>
                                     </li>
-                                    <li><strong>Project URL</strong>: <a href="#">
+                                    <li><strong>Project URL</strong>: <a href=<%=project.url%>>
                                             <%=project.url%>
                                         </a></li>
                                 </ul>
@@ -62,13 +62,14 @@
                                 <%-project.content%>
 
                             </div>
-
-                            <div class="mb-3 d-flex flex-row ">
-                                <a href="/project/<%=project._id%>/edit " class="btn mx-3">Edit project</a>
-                                <form action="/project/<%=project._id%>?_method=DELETE" method="POST">
-                                    <button class="btn">Delete Project</button>
-                                </form>
-                            </div>
+                            <% if(currentUser && project.owner.equals(currentUser)){%>
+                                <div class="mb-3 d-flex flex-row ">
+                                    <a href="/project/<%=project._id%>/edit " class="btn mx-3">Edit project</a>
+                                    <form action="/project/<%=project._id%>?_method=DELETE" method="POST">
+                                        <button class="btn">Delete Project</button>
+                                    </form>
+                                </div>
+                                <% } %>
 
                         </div>
 
