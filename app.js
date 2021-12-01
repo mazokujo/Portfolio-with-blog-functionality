@@ -181,6 +181,10 @@ app.use('/blog/:id/comment', commentRoutes);
 app.use('', userRoutes);
 //All home routes
 app.use('/', homeRoutes)
+//route to resume 
+app.get('/resume', (req, res) => {
+    res.render('resume')
+})
 
 // // handling all remaining error
 // app.all('*', (req, res, next) => {
